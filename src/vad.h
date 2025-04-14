@@ -13,6 +13,7 @@ const char *state2str(VAD_STATE st);
 
 typedef struct {
   VAD_STATE state;
+  float p0;
   float sampling_rate;
   unsigned int frame_length;
   float last_feature; /* for debuggin purposes */
@@ -37,7 +38,7 @@ unsigned int vad_frame_size(VAD_DATA *);
 
     x: input frame
        It is assumed the length is frame_length */
-VAD_STATE vad(VAD_DATA *vad_data, float *x);
+VAD_STATE vad(VAD_DATA *vad_data, float *x,float alpha0);
 
 /* Free memory
    Returns the state of the last (undecided) states. */
