@@ -141,17 +141,24 @@ Ejercicios
 - Etiquete manualmente los segmentos de voz y silencio del fichero grabado al efecto. Inserte, a 
   continuación, una captura de `wavesurfer` en la que se vea con claridad la señal temporal, el contorno de
   potencia y la tasa de cruces por cero, junto con el etiquetado manual de los segmentos.
+  Adjuntamos la imagen con la señal temporal, la potencia y la tasa de cruces por cero:
+   ![Foto1rEjercicio](pot,zcr,señal bien hecho.png)
 
 
 - A la vista de la gráfica, indique qué valores considera adecuados para las magnitudes siguientes:
 
 	* Incremento del nivel potencia en dB, respecto al nivel correspondiente al silencio inicial, para
 	  estar seguros de que un segmento de señal se corresponde con voz.
-
+		Hay un incremento de potencia de unos 15dB aproximadamente,entonces cogeremos este 15db como 
+		referencia para estar seguros de que diferencia correctamente la voz del silencio.
 	* Duración mínima razonable de los segmentos de voz y silencio.
-
+		El silencio mas corto que hemos detectado es el silencio inicial, que dura aproximadamente 250ms.
+		Igualmente pondremos un valor un poco mas pequeño para que detecte el silencio adecuadamente,
+		cogeremos 200ms. 
+		El segmento de voz mas corto en cuanto tiempo es de 1,6segundos aproximadamente
 	* ¿Es capaz de sacar alguna conclusión a partir de la evolución de la tasa de cruces por cero?
-
+		Si que vemos que los picos mas altos estan dentro de un segmento de voz, y durante los 
+		silencios no se aprecian picos muy altos. Pero no conseguimos ver que siga algun patrón.
 
 ### Desarrollo del detector de actividad vocal
 
@@ -160,6 +167,8 @@ Ejercicios
 
 - Inserte una gráfica en la que se vea con claridad la señal temporal, el etiquetado manual y la detección
   automática conseguida para el fichero grabado al efecto. 
+
+
 
 - Explique, si existen. las discrepancias entre el etiquetado manual y la detección automática.
 
