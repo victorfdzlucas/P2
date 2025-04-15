@@ -43,6 +43,13 @@ int main(int argc, char *argv[]) {
     fprintf(stderr, "Error opening input file %s (%s)\n", input_wav, strerror(errno));
     return -1;
   }
+  if (args.output_wav) {
+    sndfile_out = sf_open(args.output_wav, SFM_WRITE, &sf_info);
+    if (!sndfile_out) {
+        fprintf(stderr, "Error opening output WAV file\n");
+        return 1;
+    }
+  }
 
   if (sf_info.channels != 1) {
     fprintf(stderr, "Error: the input file has to be mono: %s\n", input_wav);
@@ -62,7 +69,7 @@ int main(int argc, char *argv[]) {
       return -1;
     }
   }
-
+  
   vad_data = vad_open(sf_info.samplerate);
   /* Allocate memory for buffers */
   frame_size   = vad_frame_size(vad_data);
@@ -93,9 +100,14 @@ int main(int argc, char *argv[]) {
       last_t = t;
     }
 
-    if (sndfile_out != 0) {
-      /* TODO: go back and write zeros in silence segments */
-    }
+    
+      if (sndfile_out) {
+        sf_seek(sndfile_out, -frame_size, SEEK_CUR);
+        sf_write_float(sndfile_out, buffer_zeros, frame_size);
+        last_state = state;
+      }
+      
+    
   }
 
   state = vad_close(vad_data);
