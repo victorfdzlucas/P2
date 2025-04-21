@@ -16,9 +16,16 @@ typedef struct {
     int verbose;
     int version;
     /* options with arguments */
+    char *alpha1;
+    char *alpha2;
     char *input_wav;
     char *output_vad;
     char *output_wav;
+    char *init_counter;
+    char *min_silence;
+    char *min_voice;
+    char *zcr_stv;
+    char *zcr_vts;
     /* special */
     const char *usage_pattern;
     const char *help_message;
@@ -38,6 +45,13 @@ const char help_message[] =
 "   -w FILE, --output-wav=FILE  WAVE file with silences cleared\n"
 "   -v, --verbose  Show debug information\n"
 "   -h, --help     Show this screen\n"
+"   -1 FLOAT, --alpha1=FLOAT                    Alpha 1 de decisió veu/silenci [default: 5]\n"
+"   -2 FLOAT, --alpha2=FLOAT                    Alpha 2 de decisió veu/silenci [default: 5]\n"
+"   -z FLOAT, --zcr_stv=FLOAT     zcr parameter to voice for VAD [default: 4000]\n"
+"   -x FLOAT, --zcr_vts=FLOAT     zcr parameter to silence for VAD [default: 2400]\n"
+"   -m REAL, --min_voice=REAL     min frame to skip to voice  [default: 9]\n"
+"   -s REAL, --min_silence=REAL     min frame to skip to silence  [default: 8]\n"
+"   -c REAL, --init_counter=REAL    num frames for background sound estimation  [default: 0]\n"
 "   --version      Show the version of the project\n"
 "";
 
@@ -276,11 +290,33 @@ int elems_to_args(Elements *elements, DocoptArgs *args, bool help,
         } else if (!strcmp(option->olong, "--output-vad")) {
             if (option->argument)
                 args->output_vad = option->argument;
+        } else if (!strcmp(option->olong, "--alpha1")) {
+            if (option->argument)
+                args->alpha1 = option->argument;
+        } else if (!strcmp(option->olong, "--alpha2")) {
+            if (option->argument)
+                args->alpha2 = option->argument;
         } else if (!strcmp(option->olong, "--output-wav")) {
             if (option->argument)
                 args->output_wav = option->argument;
+        } else if (!strcmp(option->olong, "--zcr_stv")) {
+        if (option->argument)
+            args->zcr_stv = option->argument;
+        } else if (!strcmp(option->olong, "--zcr_vts")) {
+        if (option->argument)
+            args->zcr_vts = option->argument;
+        }else if (!strcmp(option->olong, "--min_silence")) {
+            if (option->argument)
+                args->min_silence = option->argument;
+        } else if (!strcmp(option->olong, "--min_voice")) {
+            if (option->argument)
+                args->min_voice = option->argument;
+        }else if (!strcmp(option->olong, "--init_counter")) {
+            if (option->argument)
+                args->init_counter = option->argument;
         }
     }
+    
     /* commands */
     for (i=0; i < elements->n_commands; i++) {
         command = &elements->commands[i];
@@ -291,6 +327,7 @@ int elems_to_args(Elements *elements, DocoptArgs *args, bool help,
     }
     return 0;
 }
+
 
 
 /*
@@ -313,9 +350,16 @@ DocoptArgs docopt(int argc, char *argv[], bool help, const char *version) {
         {NULL, "--version", 0, 0, NULL},
         {"-i", "--input-wav", 1, 0, NULL},
         {"-o", "--output-vad", 1, 0, NULL},
-        {"-w", "--output-wav", 1, 0, NULL}
+        {"-w", "--output-wav", 1, 0, NULL},
+        {"-1", "--alpha1", 1, 0, NULL},
+        {"-2", "--alpha2", 1, 0, NULL},
+        {"-c", "--init_counter", 1, 0, NULL},
+        {"-s", "--min_silence", 1, 0, NULL},
+        {"-m", "--min_voice", 1, 0, NULL},
+        {"-z", "--zcr_stv", 1, 0, NULL},
+        {"-x", "--zcr_vts", 1, 0, NULL}
     };
-    Elements elements = {0, 0, 6, commands, arguments, options};
+    Elements elements = {0, 0, 13, commands, arguments, options};
 
     ts = tokens_new(argc, argv);
     if (parse_args(&ts, &elements))

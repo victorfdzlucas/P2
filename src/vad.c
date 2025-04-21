@@ -42,6 +42,7 @@ Features compute_features(const float *x, int N) {
    * For the moment, compute random value between 0 and 1 
    */
   Features feat;
+  feat.zcr = compute_zcr(x,N, 16000);
   feat.p=compute_power(x,N);
  // feat.zcr = feat.p = feat.am = (float) rand()/RAND_MAX;
   return feat;
@@ -51,13 +52,28 @@ Features compute_features(const float *x, int N) {
  * TODO: Init the values of vad_data
  */
 
-VAD_DATA * vad_open(float rate) {
+VAD_DATA * vad_open(float rate, float alpha1, float alpha2, int min_silence, int min_voice, float zcr_stv, float zcr_vts, int init_counter) {
   VAD_DATA *vad_data = malloc(sizeof(VAD_DATA));
+  vad_data->first_silence = 1;
   vad_data->state = ST_INIT;
   vad_data->sampling_rate = rate;
   vad_data->frame_length = rate * FRAME_TIME * 1e-3;
+  vad_data->last_feature = 0;
+  vad_data->alpha1 = alpha1;
+  vad_data->alpha2 = alpha2;
+  vad_data->min_silence = min_silence;
+  vad_data->min_voice = min_voice;
+  vad_data->init_counter = 0;
+  vad_data->maybe_s_counter = 0;
+  vad_data->maybe_v_counter = 0;
+  vad_data->zcr_stv = zcr_stv;
+  vad_data->zcr_vts = zcr_vts;
+  vad_data->counter = 0;
+  vad_data->k0 = 0;
+  vad_data->init_counter = init_counter;
   return vad_data;
 }
+
 
 VAD_STATE vad_close(VAD_DATA *vad_data) {
   /* 
@@ -78,7 +94,7 @@ unsigned int vad_frame_size(VAD_DATA *vad_data) {
  * using a Finite State Automata
  */
 
-VAD_STATE vad(VAD_DATA *vad_data, float *x,float alpha0) {
+VAD_STATE vad(VAD_DATA *vad_data, float *x) {
 
   /* 
    * TODO: You can change this, using your own features,
@@ -90,19 +106,67 @@ VAD_STATE vad(VAD_DATA *vad_data, float *x,float alpha0) {
 
   switch (vad_data->state) {
   case ST_INIT:
+  if(vad_data->counter == 0) vad_data->k0 = f.p;
+  else if(vad_data->k0 > f.p) vad_data->k0 = f.p;
+
+  vad_data->counter++;
+
+  if(vad_data->counter > vad_data->init_counter){
+    vad_data->k1 = vad_data->k0 + vad_data->alpha1; 
+    vad_data->k2 = vad_data->k1 + vad_data->alpha2;
     vad_data->state = ST_SILENCE;
-    vad_data->p0 = f.p;
+  }
     break;
 
-  case ST_SILENCE:
-    if (f.p > vad_data->p0+alpha0)
-      vad_data->state = ST_VOICE;
+    case ST_SILENCE:
+    if (f.p > vad_data->k1 || f.zcr > vad_data->zcr_stv){
+      /*usamos el parametro k1 que es el alpha para la ampliación,declarao encima del case ST_silence*/
+      vad_data->first_silence=0;
+      vad_data->maybe_v_counter++;
+      vad_data->state = ST_MAYBE_VOICE;
+    }
     break;
 
   case ST_VOICE:
-    if (f.p <  vad_data->p0+alpha0)
-      vad_data->state = ST_SILENCE;
+    if (f.p < vad_data->k1  && f.zcr < vad_data->zcr_vts){
+      /*usamos nuevos parametros alpha para la ampliación, para que sea mas segura la detección de voz*/
+      vad_data->state = ST_MAYBE_SILENCE;
+      vad_data->maybe_s_counter++;
+    }
     break;
+    case ST_MAYBE_VOICE:
+    if(f.p > vad_data->k2 || f.zcr > vad_data->zcr_stv){
+      vad_data->state = ST_VOICE;
+      vad_data->maybe_v_counter = 0;    
+    } else if (f.p > vad_data->k1){
+      if(vad_data->maybe_v_counter < vad_data->min_voice)
+        vad_data->maybe_v_counter++;
+      else {
+        vad_data->maybe_v_counter = 0;
+        vad_data->state = ST_SILENCE;
+      }
+    } else if (f.p < vad_data->k1){
+      vad_data->maybe_v_counter = 0;
+      vad_data->state = ST_SILENCE;
+    }
+    break;
+
+  case ST_MAYBE_SILENCE:
+  
+    if (f.p < vad_data->k1 && f.zcr < vad_data->zcr_vts){
+      if(vad_data->maybe_s_counter < vad_data->min_silence)
+        vad_data->maybe_s_counter++;
+      else {
+        vad_data->state = ST_SILENCE;
+        vad_data->maybe_s_counter = 0;
+      }
+    } else if (f.p > vad_data->k2){
+      vad_data->maybe_s_counter = 0;
+      vad_data->state = ST_VOICE;
+    }
+    break;
+  
+  
 
   case ST_UNDEF:
     break;
