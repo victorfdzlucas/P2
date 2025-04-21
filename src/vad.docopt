@@ -11,11 +11,11 @@ Options:
    -w FILE, --output-wav=FILE  WAVE file with silences cleared
    -v, --verbose  Show debug information
    -h, --help     Show this screen
-   -1 FLOAT, --alpha1=FLOAT                   Alpha 1 de decisió veu/silenci [default: 5]
-   -2 FLOAT, --alpha2=FLOAT                  Alpha 2 de decisió veu/silenci [default: 5]
-   -z FLOAT, --zcr_stv=FLOAT     zcr parameter to voice for VAD [default: 4000]
-   -x FLOAT, --zcr_vts=FLOAT     zcr parameter to silence for VAD [default: 2400]
-   -m REAL, --min_voice=REAL     min frame to skip to voice  [default: 9]
-   -s REAL, --min_silence=REAL     min frame to skip to silence  [default: 8]
-   -c REAL, --init_counter=REAL    num frames for background sound estimation  [default: 0]
+   -1 FLOAT, --alpha1=FLOAT     Alpha 1 de aporximación voz y silencio 
+   -2 FLOAT, --alpha2=FLOAT     Alpha 2 aproximación de voz y silencio 
+   -z FLOAT, --zcr_stv=FLOAT     zeros de la voz  
+   -x FLOAT, --zcr_vts=FLOAT     zeros del silencio 
+   -m REAL, --min_voice=REAL     num. minimo de frames para confirmar voz
+   -s REAL, --min_silence=REAL     num. minimo de frames para confirmar silencio
+   -c REAL, --init_counter=REAL    num. de frames para estimar el sonido
    --version      Show the version of the project

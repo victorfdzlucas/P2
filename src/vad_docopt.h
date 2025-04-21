@@ -45,14 +45,14 @@ const char help_message[] =
 "   -w FILE, --output-wav=FILE  WAVE file with silences cleared\n"
 "   -v, --verbose  Show debug information\n"
 "   -h, --help     Show this screen\n"
-"   -1 FLOAT, --alpha1=FLOAT                    Alpha 1 de decisió veu/silenci [default: 5]\n"
-"   -2 FLOAT, --alpha2=FLOAT                    Alpha 2 de decisió veu/silenci [default: 5]\n"
-"   -z FLOAT, --zcr_stv=FLOAT     zcr parameter to voice for VAD [default: 4000]\n"
-"   -x FLOAT, --zcr_vts=FLOAT     zcr parameter to silence for VAD [default: 2400]\n"
-"   -m REAL, --min_voice=REAL     min frame to skip to voice  [default: 9]\n"
-"   -s REAL, --min_silence=REAL     min frame to skip to silence  [default: 8]\n"
-"   -c REAL, --init_counter=REAL    num frames for background sound estimation  [default: 0]\n"
 "   --version      Show the version of the project\n"
+"   -1 FLOAT, --alpha1=FLOAT     Alpha 1 de aporximación voz y silencio \n"
+"   -2 FLOAT, --alpha2=FLOAT     Alpha 2 aproximación de voz y silencio\n"
+"   -z FLOAT, --zcr_stv=FLOAT     zeros de la voz \n"
+"   -x FLOAT, --zcr_vts=FLOAT     zeros del silencio \n"
+"   -m REAL, --min_voice=REAL     num. minimo de frames para confirmar voz\n"
+"   -s REAL, --min_silence=REAL     num. minimo de frames para confirmar silencio\n"
+"   -c REAL, --init_counter=REAL    num. de frames para estimar el sonido\n"
 "";
 
 const char usage_pattern[] =
@@ -336,7 +336,9 @@ int elems_to_args(Elements *elements, DocoptArgs *args, bool help,
 
 DocoptArgs docopt(int argc, char *argv[], bool help, const char *version) {
     DocoptArgs args = {
-        0, 0, 0, NULL, NULL, NULL,
+        0, 0, 0,
+        NULL, NULL, NULL, NULL, NULL,
+        NULL, NULL, NULL, NULL, NULL,
         usage_pattern, help_message
     };
     Tokens ts;

@@ -148,10 +148,10 @@ Ejercicios
 - A la vista de la gráfica, indique qué valores considera adecuados para las magnitudes siguientes:
 
 	* Incremento del nivel potencia en dB, respecto al nivel correspondiente al silencio inicial, para
-	  estar seguros de que un segmento de señal se corresponde con voz.
+	  estar seguros de que un segmento de señal se corresponde con voz.\n 
 		Hay un incremento de potencia de unos 15dB aproximadamente,entonces cogeremos este 15db como 
 		referencia para estar seguros de que diferencia correctamente la voz del silencio.
-	* Duración mínima razonable de los segmentos de voz y silencio.
+	* Duración mínima razonable de los segmentos de voz y silencio.\n
 		El silencio mas corto que hemos detectado es el silencio inicial, que dura aproximadamente 250ms.
 		Igualmente pondremos un valor un poco mas pequeño para que detecte el silencio adecuadamente,
 		cogeremos 200ms. 
@@ -167,11 +167,11 @@ Ejercicios
 
 - Inserte una gráfica en la que se vea con claridad la señal temporal, el etiquetado manual y la detección
   automática conseguida para el fichero grabado al efecto. 
-
+![resultado](Def pot zcr señal V,S.png)
 
 
 - Explique, si existen. las discrepancias entre el etiquetado manual y la detección automática.
-
+\n Si que hay discrepancias, pero muy pocas, si que se hace un lío en 
 - Evalúe los resultados sobre la base de datos `db.v4` con el script `vad_evaluation.pl` e inserte a 
   continuación las tasas de sensibilidad (*recall*) y precisión para el conjunto de la base de datos (sólo
   el resumen).
