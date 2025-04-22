@@ -142,7 +142,7 @@ Ejercicios
   continuación, una captura de `wavesurfer` en la que se vea con claridad la señal temporal, el contorno de
   potencia y la tasa de cruces por cero, junto con el etiquetado manual de los segmentos.
   Adjuntamos la imagen con la señal temporal, la potencia y la tasa de cruces por cero:
-   ![Foto1rEjercicio](img/pot,zcr,señal bien hecho)
+   ![Foto1rEjercicio](img/pot_zcr_señal_VS.png)
 
 
 - A la vista de la gráfica, indique qué valores considera adecuados para las magnitudes siguientes:
@@ -170,7 +170,7 @@ Ejercicios
 
 - Inserte una gráfica en la que se vea con claridad la señal temporal, el etiquetado manual y la detección
   automática conseguida para el fichero grabado al efecto. 
-![resultado](img/Def pot zcr señal V,S.png)
+![resultado](img/VSlab_VSvad.png)
 
 
 - Explique, si existen. las discrepancias entre el etiquetado manual y la detección automática.
