@@ -199,10 +199,11 @@ Aqui podemos ver como los silencios pasan a ser 0.
 
 - Indique a continuación si ha realizado algún tipo de aportación suplementaria (algoritmos de detección o 
   parámetros alternativos, etc.).
-
+	
 - Si lo desea, puede realizar también algún comentario acerca de la realización de la práctica que
   considere de interés de cara a su evaluación.
-
+	adjunto el resultado del detector de voz una vez hecho el ejercicio de ampliación
+ ![resultado detector voz ampliación](img/res_ampliacion.png)
 
 ### Antes de entregar la práctica
 

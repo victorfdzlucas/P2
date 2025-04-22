@@ -23,7 +23,7 @@ typedef struct {
   float sampling_rate;
   unsigned int frame_length;
   float last_feature; /* for debuggin purposes */
-  float k0, k1, k2,alpha0, alpha1, alpha2;
+  float p0, const1, const2,alpha0, alpha1, alpha2;
   float zcr_stv, zcr_vts;
   int maybe_v_counter, maybe_s_counter, init_counter;
   int counter;

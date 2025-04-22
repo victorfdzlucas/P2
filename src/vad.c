@@ -69,7 +69,7 @@ VAD_DATA * vad_open(float rate, float alpha1, float alpha2, int min_silence, int
   vad_data->zcr_stv = zcr_stv;
   vad_data->zcr_vts = zcr_vts;
   vad_data->counter = 0;
-  vad_data->k0 = 0;
+  vad_data->p0 = 0;
   vad_data->init_counter = init_counter;
   return vad_data;
 }
@@ -106,21 +106,21 @@ VAD_STATE vad(VAD_DATA *vad_data, float *x) {
 
   switch (vad_data->state) {
   case ST_INIT:
-  if(vad_data->counter == 0) vad_data->k0 = f.p;
-  else if(vad_data->k0 > f.p) vad_data->k0 = f.p;
+  if(vad_data->counter == 0) vad_data->p0 = f.p;
+  else if(vad_data->p0 > f.p) vad_data->p0 = f.p;
 
   vad_data->counter++;
 
   if(vad_data->counter > vad_data->init_counter){
-    vad_data->k1 = vad_data->k0 + vad_data->alpha1; 
-    vad_data->k2 = vad_data->k1 + vad_data->alpha2;
+    vad_data->const1 = vad_data->p0 + vad_data->alpha1; 
+    vad_data->const2 = vad_data->const1 + vad_data->alpha2;
     vad_data->state = ST_SILENCE;
   }
     break;
 
     case ST_SILENCE:
-    if (f.p > vad_data->k1 || f.zcr > vad_data->zcr_stv){
-      /*usamos el parametro k1 que es el alpha para la ampliación,declarao encima del case ST_silence*/
+    if (f.p > vad_data->const1 || f.zcr > vad_data->zcr_stv){
+      /*usamos el parametro const1 que es el alpha para la ampliación,declarado encima del case ST_silence*/
       vad_data->first_silence=0;
       vad_data->maybe_v_counter++;
       vad_data->state = ST_MAYBE_VOICE;
@@ -128,24 +128,24 @@ VAD_STATE vad(VAD_DATA *vad_data, float *x) {
     break;
 
   case ST_VOICE:
-    if (f.p < vad_data->k1  && f.zcr < vad_data->zcr_vts){
+    if (f.p < vad_data->const1  && f.zcr < vad_data->zcr_vts){
       /*usamos nuevos parametros alpha para la ampliación, para que sea mas segura la detección de voz*/
       vad_data->state = ST_MAYBE_SILENCE;
       vad_data->maybe_s_counter++;
     }
     break;
     case ST_MAYBE_VOICE:
-    if(f.p > vad_data->k2 || f.zcr > vad_data->zcr_stv){
+    if(f.p > vad_data->const2 || f.zcr > vad_data->zcr_stv){
       vad_data->state = ST_VOICE;
       vad_data->maybe_v_counter = 0;    
-    } else if (f.p > vad_data->k1){
+    } else if (f.p > vad_data->const1){
       if(vad_data->maybe_v_counter < vad_data->min_voice)
         vad_data->maybe_v_counter++;
       else {
         vad_data->maybe_v_counter = 0;
         vad_data->state = ST_SILENCE;
       }
-    } else if (f.p < vad_data->k1){
+    } else if (f.p < vad_data->const1){
       vad_data->maybe_v_counter = 0;
       vad_data->state = ST_SILENCE;
     }
@@ -153,14 +153,14 @@ VAD_STATE vad(VAD_DATA *vad_data, float *x) {
 
   case ST_MAYBE_SILENCE:
   
-    if (f.p < vad_data->k1 && f.zcr < vad_data->zcr_vts){
+    if (f.p < vad_data->const1 && f.zcr < vad_data->zcr_vts){
       if(vad_data->maybe_s_counter < vad_data->min_silence)
         vad_data->maybe_s_counter++;
       else {
         vad_data->state = ST_SILENCE;
         vad_data->maybe_s_counter = 0;
       }
-    } else if (f.p > vad_data->k2){
+    } else if (f.p > vad_data->const2){
       vad_data->maybe_s_counter = 0;
       vad_data->state = ST_VOICE;
     }
