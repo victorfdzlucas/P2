@@ -142,21 +142,24 @@ Ejercicios
   continuación, una captura de `wavesurfer` en la que se vea con claridad la señal temporal, el contorno de
   potencia y la tasa de cruces por cero, junto con el etiquetado manual de los segmentos.
   Adjuntamos la imagen con la señal temporal, la potencia y la tasa de cruces por cero:
-   ![Foto1rEjercicio](pot,zcr,señal bien hecho)
+   ![Foto1rEjercicio](img/pot,zcr,señal bien hecho)
 
 
 - A la vista de la gráfica, indique qué valores considera adecuados para las magnitudes siguientes:
 
 	* Incremento del nivel potencia en dB, respecto al nivel correspondiente al silencio inicial, para
-	  estar seguros de que un segmento de señal se corresponde con voz.\n 
+	  estar seguros de que un segmento de señal se corresponde con voz.
+ 
 		Hay un incremento de potencia de unos 15dB aproximadamente,entonces cogeremos este 15db como 
 		referencia para estar seguros de que diferencia correctamente la voz del silencio.
-	* Duración mínima razonable de los segmentos de voz y silencio.\n
+	* Duración mínima razonable de los segmentos de voz y silencio.
+
 		El silencio mas corto que hemos detectado es el silencio inicial, que dura aproximadamente 250ms.
 		Igualmente pondremos un valor un poco mas pequeño para que detecte el silencio adecuadamente,
 		cogeremos 200ms. 
 		El segmento de voz mas corto en cuanto tiempo es de 1,6segundos aproximadamente
 	* ¿Es capaz de sacar alguna conclusión a partir de la evolución de la tasa de cruces por cero?
+
 		Si que vemos que los picos mas altos estan dentro de un segmento de voz, y durante los 
 		silencios no se aprecian picos muy altos. Pero no conseguimos ver que siga algun patrón.
 
@@ -167,7 +170,7 @@ Ejercicios
 
 - Inserte una gráfica en la que se vea con claridad la señal temporal, el etiquetado manual y la detección
   automática conseguida para el fichero grabado al efecto. 
-![resultado](Def pot zcr señal V,S)
+![resultado](img/Def pot zcr señal V,S.png)
 
 
 - Explique, si existen. las discrepancias entre el etiquetado manual y la detección automática.
@@ -175,7 +178,7 @@ Ejercicios
 - Evalúe los resultados sobre la base de datos `db.v4` con el script `vad_evaluation.pl` e inserte a 
   continuación las tasas de sensibilidad (*recall*) y precisión para el conjunto de la base de datos (sólo
   el resumen).
-
+![resumen base de datos](img/scripts_evaluation.png)
 
 ### Trabajos de ampliación
 
@@ -184,12 +187,13 @@ Ejercicios
 - Si ha desarrollado el algoritmo para la cancelación de los segmentos de silencio, inserte una gráfica en
   la que se vea con claridad la señal antes y después de la cancelación (puede que `wavesurfer` no sea la
   mejor opción para esto, ya que no es capaz de visualizar varias señales al mismo tiempo).
-
+![señal sin ruido](img/salida_con_ceros_original.png)
+Aqui podemos ver como los silencios pasan a ser 0.
 #### Gestión de las opciones del programa usando `docopt_c`
 
 - Si ha usado `docopt_c` para realizar la gestión de las opciones y argumentos del programa `vad`, inserte
   una captura de pantalla en la que se vea el mensaje de ayuda del programa.
-
+![docopt help](img/helpdelvad.png)
 
 ### Contribuciones adicionales y/o comentarios acerca de la práctica
 
