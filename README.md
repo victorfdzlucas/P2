@@ -171,7 +171,7 @@ Ejercicios
 - Inserte una gráfica en la que se vea con claridad la señal temporal, el etiquetado manual y la detección
   automática conseguida para el fichero grabado al efecto. 
 ![resultado](img/VSlab_VSvad.png)
-
+	
 
 - Explique, si existen. las discrepancias entre el etiquetado manual y la detección automática.
 \n Si que hay discrepancias, pero muy pocas, si que se hace un lío en 
@@ -188,7 +188,8 @@ Ejercicios
   la que se vea con claridad la señal antes y después de la cancelación (puede que `wavesurfer` no sea la
   mejor opción para esto, ya que no es capaz de visualizar varias señales al mismo tiempo).
 ![señal sin ruido](img/salida_con_ceros_original.png)
-Aqui podemos ver como los silencios pasan a ser 0.
+	Para que nos cree el audio .wav con todos los silencios puestoa a 0, hemos tenido que ejcutar por comando la siguiente instruccion:
+	./bin/vad -i entrada.wav -o resultado.vad -w salida_con_ceros.wav
 #### Gestión de las opciones del programa usando `docopt_c`
 
 - Si ha usado `docopt_c` para realizar la gestión de las opciones y argumentos del programa `vad`, inserte
@@ -204,7 +205,10 @@ Aqui podemos ver como los silencios pasan a ser 0.
   considere de interés de cara a su evaluación.
 	adjunto el resultado del detector de voz una vez hecho el ejercicio de ampliación
  ![resultado detector voz ampliación](img/res_ampliacion.png)
-
+	Para que nos hiciera el fuchero .lab de la ampliación para ver si identificaba bien los segmentos de voz, silencio, los indef y maybe hemos 
+	tenido que ejecutar por comando la siguiente instruccion:
+	 bin/vad -i Tarea1_P1.wav -o Tarea1_P1.lab --alpha1 6.6 --alpha2 5.9 --zcr_stv 4000 --zcr_vts 2400 --min_silence 8 --min_voice 4 --init_counter 0
+	si no inicializabamos todas las variables nos saltaba un error.
 ### Antes de entregar la práctica
 
 Recuerde comprobar que el repositorio cuenta con los códigos correctos y en condiciones de ser 
