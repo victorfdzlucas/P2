@@ -174,7 +174,8 @@ Ejercicios
 	
 
 - Explique, si existen. las discrepancias entre el etiquetado manual y la detección automática.
-\n Si que hay discrepancias, pero muy pocas, si que se hace un lío en 
+	 Si que hay discrepancias, pero muy pocas, si que se hace un lío cuando hay ruido de fondo y lo detecta como voz pero acto seguido lo cambia a silencio, pero
+	por lo demas hay pocas discrepancias. 
 - Evalúe los resultados sobre la base de datos `db.v4` con el script `vad_evaluation.pl` e inserte a 
   continuación las tasas de sensibilidad (*recall*) y precisión para el conjunto de la base de datos (sólo
   el resumen).
